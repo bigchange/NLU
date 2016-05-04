@@ -29,7 +29,7 @@ object CoreNLPProcessor {
 
     for (sentence <- docCN.sentences){
       /**
-        * token: 中文实现分词效果(暂时无法实现)
+        * token: 中文实现分词效果(暂时无法实现) Segmentation standard(中文分词两个标准)  :ctb and pku
         */
       println(sentence.words.mkString(" "))
     }
