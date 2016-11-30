@@ -17,6 +17,7 @@ object util {
 
   /**
     * 关键词过滤
+    *
     * @param keyWords
     * @return
     */
@@ -85,7 +86,9 @@ object util {
 
   }
 
-  def getBestSentence(list: ListBuffer[String], keyWords: List[(String, Float)], summary: String): String = {
+  def getBestSentence(lb: ListBuffer[String], keyWords: List[(String, Float)], summary: String): String = {
+
+    val list = lb.filter(_ + "。" != summary)
 
     if(list.isEmpty) {
       return "无效事件"
@@ -104,8 +107,7 @@ object util {
       weights.+=((item, weight))
     }
     // weights.filter(_._2 == maxWeight).foreach(println)
-    weights.filter(_._1 != summary).map(x=> (x._1, x._1.length)).maxBy(_._2)._1
-
+    weights.map(x=> (x._1, x._1.length)).maxBy(_._2)._1
   }
 
 }

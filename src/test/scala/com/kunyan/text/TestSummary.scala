@@ -14,7 +14,7 @@ class TestSummary  extends FlatSpec with Matchers  {
   "summary" should "pass" in {
 
 
-    val pw = new PrintWriter(new FileOutputStream("events-HAN.txt", false),true)
+    val pw = new PrintWriter(new FileOutputStream("src/test/resources/events-HAN.txt", false),true)
 
     val text = Source.fromFile("src/test/resources/events.txt").getLines().toList.distinct.zipWithIndex.foreach { case (text,id) =>
 
@@ -25,13 +25,17 @@ class TestSummary  extends FlatSpec with Matchers  {
       val filteredSentecnces = util.sentenceFilter(top10Sentencs, topKey)
       println(filteredSentecnces)
       val summary = Summary.getBestSummary(text, topKey)
-      val res = (id + 1 + " = " + summary).toString
-      // pw.write(res)
-      // pw.flush()
-      println(res)
+      val res = (id + 1 + "  =  " + summary).toString
 
+      println(res)
       val describe = util.getBestSentence(filteredSentecnces, topKey, summary)
       println(describe + "\n")
+
+      pw.write(res + "\n")
+      pw.write("description:"+ describe + "\n")
+      pw.write("\n")
+      pw.flush()
+
     }
     pw.close()
 
