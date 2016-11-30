@@ -40,7 +40,7 @@ object util {
          val break = new Breaks
          break.breakable {
            keys.filter(_.length <= 2).foreach { x =>
-             if(y._1.contains(x) && x.length <=2) {
+             if(y._1.contains(x)) {
                isNeed = false
                break.break()
              }
@@ -62,21 +62,34 @@ object util {
 
   }
 
-  def sentenceFilter(list: java.util.List[String], keyWords: mutable.HashMap[String, Float]) = {
+  def sentenceFilter(list:ListBuffer[String], keyWords: List[(String, Float)]) = {
 
-    val iterator = list.listIterator()
+    val minKeyWordNum = keyWords.length - 1
     val sentences = new ListBuffer[String]
-    while(iterator.hasNext) {
-      val item = iterator.next()
-      if(item.length >= 6 && item.length <= 15) {
-        sentences.+=(item)
+
+    for(item <- list) {
+
+      if(item.length >= 6 && item.length <= 20) {
+        var count = 0
+        for (key <- keyWords) {
+          if(item.contains(key._1)) {
+            count += 1
+          }
+        }
+        if(count >= minKeyWordNum)
+          sentences.+=(item)
       }
     }
+
     sentences
+
   }
 
-  def getBestSentence(list: ListBuffer[String], keyWords: List[(String, Float)]) = {
+  def getBestSentence(list: ListBuffer[String], keyWords: List[(String, Float)], summary: String): String = {
 
+    if(list.isEmpty) {
+      return "无效事件"
+    }
     val weights = new ListBuffer[(String,Float)]
     var maxWeight = 0.0.toFloat
     for( item <- list) {
@@ -91,7 +104,7 @@ object util {
       weights.+=((item, weight))
     }
     // weights.filter(_._2 == maxWeight).foreach(println)
-    weights.filter(_._2 == maxWeight).map(x=> (x._1, x._1.length)).maxBy(_._2)._1
+    weights.filter(_._1 != summary).map(x=> (x._1, x._1.length)).maxBy(_._2)._1
 
   }
 
