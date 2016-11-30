@@ -22,13 +22,13 @@ class TestSummary  extends FlatSpec with Matchers  {
       val topKey = util.topKeyWords(filterKeyWords, 5)
       val top10Sentencs = Sentences.getTopSentenceList(text, 5)
       val summary = Summary.getBestSummary(text, topKey)
-      val res = (id + 1 + " = " + summary + "\n").toString
+      val res = (id + 1 + " = " + summary).toString
       // pw.write(res)
       // pw.flush()
       println(res)
 
       val describe = util.getBestSentence(top10Sentencs, topKey)
-      println(describe)
+      println(describe + "\n")
     }
     pw.close()
 
