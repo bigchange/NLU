@@ -177,7 +177,7 @@ public class TextRankSentence
             line = line.trim();
 
             if (line.length() == 0) continue;
-            for (String sent : line.split("[，,。:：“”？?！!；;]"))
+            for (String sent : line.split("[，　　,。丨:：“”？?！!；…;……]"))
             {
                 sent = sent.trim();
                 if (sent.length() == 0) continue;
