@@ -9,6 +9,12 @@ import scala.util.control.Breaks
   */
 object util {
 
+  def topKeyWords(keyWords: mutable.HashMap[String, Float], size: Int) = {
+
+    keyWords.toList.sortBy(_._2).reverse.take(size)
+
+  }
+
   /**
     * 关键词过滤
     * @param keyWords
@@ -41,14 +47,18 @@ object util {
            }
          }
        }
+
       isNeed
+
       }
-    filtered.map { x =>
+
+    val filter = filtered.map { x =>
       if(x._1.length >= 3)
         (x._1.substring(0,3), x._2)
       else
         x
     }
+    filter
 
   }
 
@@ -65,15 +75,12 @@ object util {
     sentences
   }
 
-  def getBestSentence(list: java.util.List[String], keyWords: mutable.HashMap[String, Float]) = {
+  def getBestSentence(list: ListBuffer[String], keyWords: List[(String, Float)]) = {
 
-    val iterator = list.listIterator()
-    val res = new mutable.HashMap[String, Float]()
     val weights = new ListBuffer[(String,Float)]
     var maxWeight = 0.0.toFloat
-    while(iterator.hasNext) {
+    for( item <- list) {
       var weight = 0.0.toFloat
-      val item = iterator.next()
       keyWords.foreach { x =>
         if(item.contains(x._1)) {
           weight += x._2
@@ -83,8 +90,8 @@ object util {
         maxWeight = weight
       weights.+=((item, weight))
     }
-    weights.filter(_._2 == maxWeight).foreach(println)
-    weights.filter(_._2 == maxWeight).map(x=> (x._1, x._1.length)).minBy(_._2)._1
+    // weights.filter(_._2 == maxWeight).foreach(println)
+    weights.filter(_._2 == maxWeight).map(x=> (x._1, x._1.length)).maxBy(_._2)._1
 
   }
 
