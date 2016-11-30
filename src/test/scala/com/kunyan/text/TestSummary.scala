@@ -23,15 +23,6 @@ class TestSummary  extends FlatSpec with Matchers  {
 
     val doc = Source.fromFile("E:\\github\\TextRank4ZH-master\\test\\doc\\01.txt").getLines().toList.mkString
 
-    val keyWords = KeyWords.getTermAndRank(text)
-    println("keyWords:" + keyWords.size())
-    val res = util.wordFilter(keyWords)
-    println(res)
-    val sentences = util.getBestSentence(Sentences.getTopSentenceList(text, 10), res)
-    println("sentences:" + sentences)
-
-    val phrase = Phrase.getPhrase(text, 10)
-    println("phrase:" + phrase)
     val break = new Breaks
     break.breakable {
       for(i <-  6 to 20) {

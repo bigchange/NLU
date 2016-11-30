@@ -68,7 +68,6 @@ object util {
   def getBestSentence(list: java.util.List[String], keyWords: mutable.HashMap[String, Float]) = {
 
     val iterator = list.listIterator()
-    val res = new mutable.HashMap[String, Float]()
     val weights = new ListBuffer[(String,Float)]
     var maxWeight = 0.0.toFloat
     while(iterator.hasNext) {
