@@ -50,6 +50,7 @@ object util {
         x
     }
 
+
   }
 
   def sentenceFilter(list: java.util.List[String], keyWords: mutable.HashMap[String, Float]) = {
@@ -65,14 +66,12 @@ object util {
     sentences
   }
 
-  def getBestSentence(list: java.util.List[String], keyWords: mutable.HashMap[String, Float]) = {
+  def getBestSentence(list: ListBuffer[String], keyWords: mutable.HashMap[String, Float]) = {
 
-    val iterator = list.listIterator()
     val weights = new ListBuffer[(String,Float)]
     var maxWeight = 0.0.toFloat
-    while(iterator.hasNext) {
+    for( item <- list) {
       var weight = 0.0.toFloat
-      val item = iterator.next()
       keyWords.foreach { x =>
         if(item.contains(x._1)) {
           weight += x._2

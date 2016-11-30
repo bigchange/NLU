@@ -22,20 +22,21 @@ object Summary {
 
   /**
     * 获取最短摘要
-    * @param doc
+    * @param doc 文章
     */
   def getBestSummary(doc:String) = {
-
+    var res = ""
     val break = new Breaks
     break.breakable {
       for(i <-  6 to 25) {
         val summary = Summary.summary(doc, i)
         if(summary.nonEmpty) {
-          println(summary)
+          res = summary
           break.break()
         }
       }
     }
+    res
   }
 
 }
