@@ -9,6 +9,12 @@ import scala.util.control.Breaks
   */
 object util {
 
+  def topKeyWords(keyWords: mutable.HashMap[String, Float], size: Int) = {
+
+    keyWords.toList.sortBy(_._2).reverse.take(size)
+
+  }
+
   /**
     * 关键词过滤
     * @param keyWords
@@ -41,15 +47,18 @@ object util {
            }
          }
        }
+
       isNeed
+
       }
-    filtered.map { x =>
+
+    val filter = filtered.map { x =>
       if(x._1.length >= 3)
         (x._1.substring(0,3), x._2)
       else
         x
     }
-
+    filter
 
   }
 
@@ -81,8 +90,8 @@ object util {
         maxWeight = weight
       weights.+=((item, weight))
     }
-    weights.filter(_._2 == maxWeight).foreach(println)
-    weights.filter(_._2 == maxWeight).map(x=> (x._1, x._1.length)).minBy(_._2)._1
+    // weights.filter(_._2 == maxWeight).foreach(println)
+    weights.filter(_._2 == maxWeight).map(x=> (x._1, x._1.length)).maxBy(_._2)._1
 
   }
 

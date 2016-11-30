@@ -24,13 +24,14 @@ object Summary {
     * 获取最短摘要
     * @param doc 文章
     */
-  def getBestSummary(doc:String) = {
+  def getBestSummary(doc:String, topKeyWords: List[(String, Float)]) = {
     var res = ""
     val break = new Breaks
     break.breakable {
       for(i <-  6 to 25) {
+
         val summary = Summary.summary(doc, i)
-        if(summary.nonEmpty) {
+        if(summary.nonEmpty ) {
           res = summary
           break.break()
         }
