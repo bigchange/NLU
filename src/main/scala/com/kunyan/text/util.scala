@@ -75,7 +75,7 @@ object util {
     sentences
   }
 
-  def getBestSentence(list: ListBuffer[String], keyWords: mutable.HashMap[String, Float]) = {
+  def getBestSentence(list: ListBuffer[String], keyWords: List[(String, Float)]) = {
 
     val weights = new ListBuffer[(String,Float)]
     var maxWeight = 0.0.toFloat

@@ -28,7 +28,7 @@ object Summary {
     var res = ""
     val break = new Breaks
     break.breakable {
-      for(i <-  6 to 25) {
+      for(i <-  6 to 100) {
 
         val summary = Summary.summary(doc, i)
         if(summary.nonEmpty ) {

@@ -19,19 +19,16 @@ class TestSummary  extends FlatSpec with Matchers  {
     val text = Source.fromFile("src/test/resources/events.txt").getLines().toList.distinct.zipWithIndex.foreach { case (text,id) =>
       val keyWords = KeyWords.getTermAndRank(text)
       val filterKeyWords = util.wordFilter(keyWords)
-      val topKey = util.topKeyWords(filterKeyWords, 3)
-      println(topKey)
-      val phrase = Phrase.getPhrase(text, 3)
-      println("topPhrase:\n" + phrase.mkString("\n"))
-      val top10Sentencs = Sentences.getTopSentenceList(text, 3)
-      println("top10Sentencs:\n" + top10Sentencs.mkString("\n"))
-      val sentences = util.getBestSentence(Sentences.getTopSentenceList(text, 3), filterKeyWords)
-      println("getBestSentence:" + sentences)
+      val topKey = util.topKeyWords(filterKeyWords, 5)
+      val top10Sentencs = Sentences.getTopSentenceList(text, 5)
       val summary = Summary.getBestSummary(text, topKey)
       val res = (id + 1 + " = " + summary + "\n").toString
       // pw.write(res)
       // pw.flush()
       println(res)
+
+      val describe = util.getBestSentence(top10Sentencs, topKey)
+      println(describe)
     }
     pw.close()
 
