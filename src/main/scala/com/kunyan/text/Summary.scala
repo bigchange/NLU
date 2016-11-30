@@ -28,7 +28,7 @@ object Summary {
 
     val break = new Breaks
     break.breakable {
-      for(i <-  6 to 20) {
+      for(i <-  6 to 25) {
         val summary = Summary.summary(doc, i)
         if(summary.nonEmpty) {
           println(summary)
