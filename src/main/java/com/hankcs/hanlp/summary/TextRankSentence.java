@@ -262,6 +262,46 @@ public class TextRankSentence
         return TextUtility.join("。", resultList);
     }
 
+    /**
+     * 获取过滤sentence后的summary
+     * @param resultList
+     * @param sentenceList
+     * @param max_length
+     * @return
+     */
+    public static String getOptSummary(List<String> resultList, List<String> sentenceList, int max_length)
+    {
+        resultList = permutation(resultList, sentenceList);
+        resultList = pick_sentences(resultList, max_length);
+        return TextUtility.join("。", resultList);
+    }
+
+    /**
+     * 获取summary 的sentence list
+     * @param document
+     * @param max_length
+     * @return
+     */
+    public static List<String> getSummarySentenceList(String document, int max_length) {
+        List<String> sentenceList = spiltSentence(document);
+
+        int sentence_count = sentenceList.size();
+        int document_length = document.length();
+        int sentence_length_avg = document_length / sentence_count;
+        int size = max_length / sentence_length_avg + 1;
+        List<List<String>> docs = convertSentenceListToDocument(sentenceList);
+        TextRankSentence textRank = new TextRankSentence(docs);
+        int[] topSentence = textRank.getTopSentence(size);
+        List<String> resultList = new LinkedList<String>();
+
+        for (int i : topSentence) {
+            resultList.add(sentenceList.get(i));
+        }
+
+        return  resultList;
+
+    }
+
     public static List<String> permutation(List<String> resultList, List<String> sentenceList)
     {
         int index_buffer_x;

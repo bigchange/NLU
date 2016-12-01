@@ -31,10 +31,11 @@ class TestSummary  extends FlatSpec with Matchers  {
       val describe = util.getBestSentence(filteredSentecnces, topKey, summary)
       println(describe + "\n")
 
-      pw.write(res + "\n")
+      // 写入文件
+     /* pw.write(res + "\n")
       pw.write("description:"+ describe + "\n")
       pw.write("\n")
-      pw.flush()
+      pw.flush()*/
 
     }
     pw.close()

@@ -1,7 +1,10 @@
 package com.kunyan.text
 
+import java.util
+
 import com.hankcs.hanlp.summary.TextRankSentence
 
+import scala.collection.mutable.ListBuffer
 import scala.util.control.Breaks
 
 /**
@@ -9,14 +12,11 @@ import scala.util.control.Breaks
   */
 object Summary {
 
-  /**
-    * 获取摘要 长度为 maxLength
-    * @param doc
-    * @param maxLength
-    * @return
-    */
-  def summary(doc: String, maxLength:Int) = {
-    TextRankSentence.getSummary(doc, maxLength)
+
+  def getSummary(doc: String, maxLength:Int) = {
+
+    val summary =TextRankSentence.getSummary(doc, maxLength)
+
   }
 
 
@@ -30,7 +30,7 @@ object Summary {
     break.breakable {
       for(i <-  6 to 100) {
 
-        val summary = Summary.summary(doc, i)
+        val summary = Summary.getSummary(doc, i)
         if(summary.nonEmpty ) {
           res = summary
           break.break()

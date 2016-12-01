@@ -34,7 +34,9 @@ object util {
       if(value >= 0.02)
         resHashMap.put(key, value)
     }
+
     val keys = resHashMap.keySet
+
     val filtered = resHashMap.filter { y =>
        var isNeed = true
        if(y._1.length > 2) {
