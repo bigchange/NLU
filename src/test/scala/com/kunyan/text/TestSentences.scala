@@ -19,6 +19,7 @@ class TestSentences extends FlatSpec with Matchers {
     val keyWords = KeyWords.getTermAndRank(text)
     val filterKeyWords = util.wordFilter(keyWords)
     val topKey = util.topKeyWords(filterKeyWords, 5)
+    val topTenSentences = Sentences.getTopSentenceList(text, 10)
 
 
   }

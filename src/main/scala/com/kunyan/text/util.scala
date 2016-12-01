@@ -65,6 +65,32 @@ object util {
 
   }
 
+  def phraseFilter(list:ListBuffer[String], keyWords: List[(String, Float)]) = {
+
+    val minKeyWordNum = keyWords.length / 2 - 1
+    val phrase = new ListBuffer[String]
+
+    for(item <- list) {
+
+      if(item.length >= 2 && item.length <= 5) {
+        var count = 0
+        for (key <- keyWords) {
+          if(item.contains(key._1)) {
+            count += 1
+          }
+        }
+        if(count >= minKeyWordNum)
+          phrase.+=(item)
+      }
+    }
+
+    if(phrase.isEmpty)
+      phrase.+=(keyWords.head._1)
+
+    phrase
+
+  }
+
   def sentenceFilter(list:ListBuffer[String], keyWords: List[(String, Float)]) = {
 
     val minKeyWordNum = keyWords.length - 1
