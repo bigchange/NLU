@@ -9,14 +9,28 @@ import scala.util.control.Breaks
   */
 object Summary {
 
-  /**
-    * 获取摘要 长度为 maxLength
-    * @param doc
-    * @param maxLength
-    * @return
-    */
-  def summary(doc: String, maxLength:Int) = {
+  def summary(doc: String)  = {
+
+    val keyWords = KeyWords.getTermAndRank(doc)
+    val filterKeyWords = util.wordFilter(keyWords)
+    val topKey = util.topKeyWords(filterKeyWords, 3)
+
+    val topTenSentences = Sentences.getTopSentenceList(doc, 10)
+    val filteredSentences = util.sentenceFilter(topTenSentences, topKey)
+    println(filteredSentences)
+
+    val summary = getBestSummary(doc, topKey)
+    val describe = util.getBestSentence(filteredSentences, topKey, summary)
+
+    (summary, describe)
+
+  }
+
+
+  private  def getSummary(doc: String, maxLength:Int) = {
+
     TextRankSentence.getSummary(doc, maxLength)
+
   }
 
 
@@ -27,10 +41,12 @@ object Summary {
   def getBestSummary(doc:String, topKeyWords: List[(String, Float)]) = {
     var res = ""
     val break = new Breaks
+
     break.breakable {
+
       for(i <-  6 to 100) {
 
-        val summary = Summary.summary(doc, i)
+        val summary = Summary.getSummary(doc, i)
         if(summary.nonEmpty ) {
           res = summary
           break.break()

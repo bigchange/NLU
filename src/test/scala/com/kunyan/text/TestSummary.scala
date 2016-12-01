@@ -14,21 +14,20 @@ class TestSummary  extends FlatSpec with Matchers  {
   "summary" should "pass" in {
 
 
-    val pw = new PrintWriter(new FileOutputStream("events-HAN.txt", false),true)
+    val pw = new PrintWriter(new FileOutputStream("src/test/resources/events-HAN.txt", false),true)
 
     val text = Source.fromFile("src/test/resources/events.txt").getLines().toList.distinct.zipWithIndex.foreach { case (text,id) =>
-      val keyWords = KeyWords.getTermAndRank(text)
-      val filterKeyWords = util.wordFilter(keyWords)
-      val topKey = util.topKeyWords(filterKeyWords, 5)
-      val top10Sentencs = Sentences.getTopSentenceList(text, 5)
-      val summary = Summary.getBestSummary(text, topKey)
-      val res = (id + 1 + " = " + summary).toString
-      // pw.write(res)
-      // pw.flush()
-      println(res)
 
-      val describe = util.getBestSentence(top10Sentencs, topKey)
-      println(describe + "\n")
+      val result = Summary.summary(text)
+      val summary = id + 1 + " -- " + result._1
+      println(summary)
+      println(result._2 + "\n")
+      // 写入文件
+      pw.write(summary + "\n")
+      pw.write("description:"+ result._2 + "\n")
+      pw.write("\n")
+      pw.flush()
+
     }
     pw.close()
 

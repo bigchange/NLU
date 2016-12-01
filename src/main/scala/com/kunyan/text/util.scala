@@ -17,6 +17,7 @@ object util {
 
   /**
     * 关键词过滤
+    *
     * @param keyWords
     * @return
     */
@@ -33,14 +34,16 @@ object util {
       if(value >= 0.02)
         resHashMap.put(key, value)
     }
+
     val keys = resHashMap.keySet
+
     val filtered = resHashMap.filter { y =>
        var isNeed = true
        if(y._1.length > 2) {
          val break = new Breaks
          break.breakable {
            keys.filter(_.length <= 2).foreach { x =>
-             if(y._1.contains(x) && x.length <=2) {
+             if(y._1.contains(x)) {
                isNeed = false
                break.break()
              }
@@ -62,21 +65,36 @@ object util {
 
   }
 
-  def sentenceFilter(list: java.util.List[String], keyWords: mutable.HashMap[String, Float]) = {
+  def sentenceFilter(list:ListBuffer[String], keyWords: List[(String, Float)]) = {
 
-    val iterator = list.listIterator()
+    val minKeyWordNum = keyWords.length - 1
     val sentences = new ListBuffer[String]
-    while(iterator.hasNext) {
-      val item = iterator.next()
-      if(item.length >= 6 && item.length <= 15) {
-        sentences.+=(item)
+
+    for(item <- list) {
+
+      if(item.length >= 6 && item.length <= 20) {
+        var count = 0
+        for (key <- keyWords) {
+          if(item.contains(key._1)) {
+            count += 1
+          }
+        }
+        if(count >= minKeyWordNum)
+          sentences.+=(item)
       }
     }
+
     sentences
+
   }
 
-  def getBestSentence(list: ListBuffer[String], keyWords: List[(String, Float)]) = {
+  def getBestSentence(lb: ListBuffer[String], keyWords: List[(String, Float)], summary: String): String = {
 
+    val list = lb.filter(_ + "。" != summary)
+
+    if(list.isEmpty) {
+      return "无效事件"
+    }
     val weights = new ListBuffer[(String,Float)]
     var maxWeight = 0.0.toFloat
     for( item <- list) {
@@ -91,8 +109,7 @@ object util {
       weights.+=((item, weight))
     }
     // weights.filter(_._2 == maxWeight).foreach(println)
-    weights.filter(_._2 == maxWeight).map(x=> (x._1, x._1.length)).maxBy(_._2)._1
-
+    weights.map(x=> (x._1, x._1.length)).maxBy(_._2)._1
   }
 
 }
