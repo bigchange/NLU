@@ -1,10 +1,7 @@
 package com.kunyan.text
 
-import java.util
-
 import com.hankcs.hanlp.summary.TextRankSentence
 
-import scala.collection.mutable.ListBuffer
 import scala.util.control.Breaks
 
 /**
@@ -12,10 +9,27 @@ import scala.util.control.Breaks
   */
 object Summary {
 
+  def summary(doc: String)  = {
 
-  def getSummary(doc: String, maxLength:Int) = {
+    val keyWords = KeyWords.getTermAndRank(doc)
+    val filterKeyWords = util.wordFilter(keyWords)
+    val topKey = util.topKeyWords(filterKeyWords, 3)
 
-    val summary =TextRankSentence.getSummary(doc, maxLength)
+    val topTenSentences = Sentences.getTopSentenceList(doc, 10)
+    val filteredSentences = util.sentenceFilter(topTenSentences, topKey)
+    println(filteredSentences)
+
+    val summary = getBestSummary(doc, topKey)
+    val describe = util.getBestSentence(filteredSentences, topKey, summary)
+
+    (summary, describe)
+
+  }
+
+
+  private  def getSummary(doc: String, maxLength:Int) = {
+
+    TextRankSentence.getSummary(doc, maxLength)
 
   }
 
@@ -27,7 +41,9 @@ object Summary {
   def getBestSummary(doc:String, topKeyWords: List[(String, Float)]) = {
     var res = ""
     val break = new Breaks
+
     break.breakable {
+
       for(i <-  6 to 100) {
 
         val summary = Summary.getSummary(doc, i)
