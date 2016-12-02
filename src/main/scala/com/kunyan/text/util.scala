@@ -79,8 +79,10 @@ object util {
             count += 1
           }
         }
-        if(count >= minKeyWordNum)
+        if(count >= minKeyWordNum) {
           phrase.+=(item)
+        }
+
       }
     }
 

@@ -17,7 +17,6 @@ object Summary {
 
     val topTenSentences = Sentences.getTopSentenceList(doc, 10)
     val filteredSentences = util.sentenceFilter(topTenSentences, topKey)
-    println(filteredSentences)
 
     val summary = getBestSummary(doc, topKey)
     val describe = util.getBestSentence(filteredSentences, topKey, summary)
