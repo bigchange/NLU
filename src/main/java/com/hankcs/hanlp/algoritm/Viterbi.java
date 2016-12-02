@@ -25,6 +25,25 @@ import java.util.*;
  */
 public class Viterbi
 {
+
+    /**
+     * print out path
+     * @param obs 观测序列数
+     * @param states 隐状态数
+     * @param path 存储的路径
+     */
+    public  static  void  printPath(int[] obs, int[] states, int[][] path)
+    {
+        for (int s: states)
+        {
+            for (int t = 0; t < obs.length; ++t)
+            {
+                System.out.print(path[s][t] + " ");
+            }
+            System.out.println();
+        }
+
+    }
     /**
      * 求解HMM模型，所有概率请提前取对数
      *
@@ -43,30 +62,41 @@ public class Viterbi
             _max_states_value = Math.max(_max_states_value, s);
         }
         ++_max_states_value;
+
+        System.out.println("_max_states_value:" + _max_states_value);
+
         double[][] V = new double[obs.length][_max_states_value];
         int[][] path = new int[_max_states_value][obs.length];
 
         for (int y : states)
         {
-            V[0][y] = start_p[y] + emit_p[y][obs[0]];
+            V[0][y] = start_p[y] * emit_p[y][obs[0]];
             path[y][0] = y;
         }
+
+        printPath(obs, states, path);
+
+        // System.out.println("V:" + V[0][0] + "," + V[0][1]);
+        // System.out.println("path:" + path[0][0] + "," + path[1][0]);
 
         for (int t = 1; t < obs.length; ++t)
         {
             int[][] newpath = new int[_max_states_value][obs.length];
-
+            System.out.println("------------------------------");
             for (int y : states)
             {
-                double prob = Double.MAX_VALUE;
+                double prob = Double.MIN_VALUE;
                 int state;
                 for (int y0 : states)
                 {
-                    double nprob = V[t - 1][y0] + trans_p[y0][y] + emit_p[y][obs[t]];
-                    if (nprob < prob)
+                    System.out.println("#####");
+                    double nprob = V[t - 1][y0] * trans_p[y0][y] * emit_p[y][obs[t]];
+                    System.out.println("nprob:" + nprob + " = " + V[t - 1][y0] + "*" + trans_p[y0][y] + "*" + emit_p[y][obs[t]]);
+                    if (nprob > prob)
                     {
                         prob = nprob;
                         state = y0;
+                        System.out.println("state:" + state);
                         // 记录最大概率
                         V[t][y] = prob;
                         // 记录路径
@@ -74,16 +104,18 @@ public class Viterbi
                         newpath[y][t] = y;
                     }
                 }
+                System.out.println("newpath:");
+                printPath(obs, states, newpath);
             }
 
             path = newpath;
         }
 
-        double prob = Double.MAX_VALUE;
+        double prob = Double.MIN_VALUE;
         int state = 0;
         for (int y : states)
         {
-            if (V[obs.length - 1][y] < prob)
+            if (V[obs.length - 1][y] > prob)
             {
                 prob = V[obs.length - 1][y];
                 state = y;
