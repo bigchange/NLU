@@ -70,7 +70,7 @@ public class Viterbi
 
         for (int y : states)
         {
-            V[0][y] = start_p[y] * emit_p[y][obs[0]];
+            V[0][y] = start_p[y] + emit_p[y][obs[0]];
             path[y][0] = y;
         }
 
@@ -85,14 +85,14 @@ public class Viterbi
             System.out.println(t + ":------------------------------");
             for (int y : states)
             {
-                double prob = Double.MIN_VALUE;
+                double prob = Double.MAX_VALUE;
                 int state;
                 for (int y0 : states)
                 {
                     // System.out.println("#####");
                     double nprob = V[t - 1][y0] * trans_p[y0][y] * emit_p[y][obs[t]];
                     // System.out.println("nprob:" + nprob + " = " + V[t - 1][y0] + "*" + trans_p[y0][y] + "*" + emit_p[y][obs[t]]);
-                    if (nprob > prob)
+                    if (nprob < prob)
                     {
                         prob = nprob;
                         state = y0;
@@ -111,11 +111,11 @@ public class Viterbi
             path = newpath;
         }
 
-        double prob = Double.MIN_VALUE;
+        double prob = Double.MAX_VALUE;
         int state = 0;
         for (int y : states)
         {
-            if (V[obs.length - 1][y] > prob)
+            if (V[obs.length - 1][y] < prob)
             {
                 prob = V[obs.length - 1][y];
                 state = y;
